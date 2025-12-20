@@ -1,0 +1,248 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "C′ implementation",
+  "scopeName": "source.opq",
+  "fileTypes": [
+    "opq"
+  ],
+  "comment": "C′ agent implementations (.opq, short for opaque). Follows the normative grammar in docs/spec/components/cprime-syntax.md. Highlighting only: no rule here affects parsing.",
+  "patterns": [
+    {
+      "include": "#header"
+    },
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#forms"
+    },
+    {
+      "include": "#reserved"
+    },
+    {
+      "include": "#literals"
+    },
+    {
+      "include": "#names"
+    },
+    {
+      "include": "#punctuation"
+    }
+  ],
+  "repository": {
+    "header": {
+      "patterns": [
+        {
+          "comment": "acceptance header, first line of an accepted file (SA-07)",
+          "match": "\\A(;;)\\s+(cprime-accepted)\\s+(v1)\\b(.*)$",
+          "name": "meta.acceptance-header.opq",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.comment.opq"
+            },
+            "2": {
+              "name": "keyword.other.acceptance-header.opq"
+            },
+            "3": {
+              "name": "constant.other.version.opq"
+            },
+            "4": {
+              "name": "comment.line.acceptance-header.opq"
+            }
+          }
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.semicolon.opq",
+          "match": ";.*$"
+        }
+      ]
+    },
+    "forms": {
+      "patterns": [
+        {
+          "comment": "(impl Module::spec [params] …)",
+          "match": "(\\()\\s*(impl)\\s+([A-Za-z_][A-Za-z0-9_]*(?:::[A-Za-z_][A-Za-z0-9_]*)*)",
+          "captures": {
+            "1": {
+              "name": "punctuation.section.parens.opq"
+            },
+            "2": {
+              "name": "keyword.other.impl.opq"
+            },
+            "3": {
+              "name": "entity.name.function.opq"
+            }
+          }
+        },
+        {
+          "comment": "(par_map Spec xs) and (perform Cap::op …): the head names a spec or an operation",
+          "match": "(\\()\\s*(par_map|perform)\\s+([A-Za-z_][A-Za-z0-9_]*(?:::[A-Za-z_][A-Za-z0-9_]*)*)",
+          "captures": {
+            "1": {
+              "name": "punctuation.section.parens.opq"
+            },
+            "2": {
+              "name": "keyword.control.$2.opq"
+            },
+            "3": {
+              "name": "entity.name.function.opq"
+            }
+          }
+        },
+        {
+          "match": "(\\()\\s*(decreases|let|if|match|vec)\\b",
+          "captures": {
+            "1": {
+              "name": "punctuation.section.parens.opq"
+            },
+            "2": {
+              "name": "keyword.control.$2.opq"
+            }
+          }
+        },
+        {
+          "comment": "(. e field): field access",
+          "match": "(\\()\\s*(\\.)(?=\\s)",
+          "captures": {
+            "1": {
+              "name": "punctuation.section.parens.opq"
+            },
+            "2": {
+              "name": "keyword.operator.accessor.opq"
+            }
+          }
+        },
+        {
+          "comment": "operator heads",
+          "match": "(\\()\\s*(==|!=|<=|>=|\\+\\+|[-+*/%<>])(?=[\\s()])",
+          "captures": {
+            "1": {
+              "name": "punctuation.section.parens.opq"
+            },
+            "2": {
+              "name": "keyword.operator.opq"
+            }
+          }
+        },
+        {
+          "match": "\\b(and|or|not)\\b",
+          "name": "keyword.operator.word.opq"
+        },
+        {
+          "match": "\\b(wrapping_add|wrapping_sub|wrapping_mul|len|index|u64_be|push|slice|to_bytes)\\b",
+          "name": "support.function.prelude.opq"
+        },
+        {
+          "match": "(\\()\\s*(and|or|not)\\b",
+          "captures": {
+            "1": {
+              "name": "punctuation.section.parens.opq"
+            },
+            "2": {
+              "name": "keyword.operator.word.opq"
+            }
+          }
+        },
+        {
+          "match": "(\\()\\s*(wrapping_add|wrapping_sub|wrapping_mul|len|index|u64_be|push|slice|to_bytes)\\b",
+          "captures": {
+            "1": {
+              "name": "punctuation.section.parens.opq"
+            },
+            "2": {
+              "name": "support.function.prelude.opq"
+            }
+          }
+        },
+        {
+          "comment": "head of an application: a prelude function, spec call or constructor",
+          "match": "(\\()\\s*(?!(?:fn|loop|invariant)\\b)([a-z_][A-Za-z0-9_]*(?:::[A-Za-z_][A-Za-z0-9_]*)*)(?=[\\s()\\[\\]])",
+          "captures": {
+            "1": {
+              "name": "punctuation.section.parens.opq"
+            },
+            "2": {
+              "name": "entity.name.function.opq"
+            }
+          }
+        }
+      ]
+    },
+    "reserved": {
+      "patterns": [
+        {
+          "comment": "future-reserved words (SA-49): E-RESERVED",
+          "match": "\\b(fn|loop|invariant)\\b",
+          "name": "invalid.illegal.reserved.opq"
+        }
+      ]
+    },
+    "literals": {
+      "patterns": [
+        {
+          "match": "\\b0x(?:[0-9a-fA-F]{2})*\\b",
+          "name": "constant.other.bytes.opq"
+        },
+        {
+          "comment": "odd hex digit count: E-HEX",
+          "match": "\\b0x[0-9a-fA-F]+\\b",
+          "name": "invalid.illegal.bytes.opq"
+        },
+        {
+          "match": "\\b(true|false)\\b",
+          "name": "constant.language.boolean.opq"
+        },
+        {
+          "match": "(?<![A-Za-z0-9_])-[0-9]+\\b",
+          "name": "constant.numeric.integer.negative.opq"
+        },
+        {
+          "match": "\\b[0-9]+\\b",
+          "name": "constant.numeric.integer.opq"
+        },
+        {
+          "match": "\\(\\s*\\)",
+          "name": "constant.language.unit.opq"
+        }
+      ]
+    },
+    "names": {
+      "patterns": [
+        {
+          "match": "\\b(Unit|Bool|U8|U64|I64|Bytes|FixedBytes|Vec|Hash|Result|Option)\\b",
+          "name": "support.type.builtin.opq"
+        },
+        {
+          "comment": "qualified names: Cap::op, Module::spec, U64::MAX",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_]*(?:::[A-Za-z_][A-Za-z0-9_]*)+\\b",
+          "name": "entity.name.qualified.opq"
+        },
+        {
+          "comment": "constructors and variants",
+          "match": "\\b[A-Z][A-Za-z0-9_]*\\b",
+          "name": "entity.name.type.opq"
+        },
+        {
+          "match": "\\b[a-z_][A-Za-z0-9_]*\\b",
+          "name": "variable.other.opq"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "match": "[()]",
+          "name": "punctuation.section.parens.opq"
+        },
+        {
+          "match": "[\\[\\]]",
+          "name": "punctuation.section.brackets.opq"
+        }
+      ]
+    }
+  }
+}

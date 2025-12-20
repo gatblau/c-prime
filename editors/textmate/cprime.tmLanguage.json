@@ -1,0 +1,428 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "C′ contract",
+  "scopeName": "source.cprime",
+  "fileTypes": [
+    "cprime"
+  ],
+  "comment": "C′ contract files (.cprime). Follows the normative grammar in docs/spec/components/cprime-syntax.md (ADR-050). Highlighting only: no rule here affects parsing.",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#declarations"
+    },
+    {
+      "include": "#clauses"
+    },
+    {
+      "include": "#reserved"
+    },
+    {
+      "include": "#literals"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#names"
+    },
+    {
+      "include": "#punctuation"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.cprime",
+          "match": "//.*$"
+        }
+      ]
+    },
+    "declarations": {
+      "patterns": [
+        {
+          "comment": "module A::B",
+          "match": "^(module)\\s+([A-Z][A-Za-z0-9]*(?:::[A-Z][A-Za-z0-9]*)*)",
+          "captures": {
+            "1": {
+              "name": "keyword.other.module.cprime"
+            },
+            "2": {
+              "name": "entity.name.namespace.cprime"
+            }
+          }
+        },
+        {
+          "comment": "server S { handler Spec; transport provider::Path } (ADR-051); handler and transport are keywords only here",
+          "begin": "^(server)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(\\{)",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.server.cprime"
+            },
+            "2": {
+              "name": "entity.name.type.cprime"
+            },
+            "3": {
+              "name": "punctuation.section.braces.cprime"
+            }
+          },
+          "end": "\\}",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.section.braces.cprime"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "match": "(?:^|(?<=;)|(?<=\\{))\\s*(handler)\\s+((?:[A-Za-z_][A-Za-z0-9_]*::)*)([A-Za-z_][A-Za-z0-9_]*)",
+              "captures": {
+                "1": {
+                  "name": "keyword.other.server.handler.cprime"
+                },
+                "2": {
+                  "name": "entity.name.namespace.cprime"
+                },
+                "3": {
+                  "name": "entity.name.function.cprime"
+                }
+              }
+            },
+            {
+              "match": "(?:^|(?<=;)|(?<=\\{))\\s*(transport)\\b",
+              "captures": {
+                "1": {
+                  "name": "keyword.other.server.transport.cprime"
+                }
+              }
+            },
+            {
+              "include": "#reserved"
+            },
+            {
+              "include": "#names"
+            },
+            {
+              "include": "#punctuation"
+            }
+          ]
+        },
+        {
+          "comment": "capability C { [deterministic] op(params) Ret }",
+          "begin": "^(capability)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(\\{)",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.capability.cprime"
+            },
+            "2": {
+              "name": "entity.name.type.cprime"
+            },
+            "3": {
+              "name": "punctuation.section.braces.cprime"
+            }
+          },
+          "end": "\\}",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.section.braces.cprime"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "comment": "fn before an operation name is E-FN",
+              "match": "(?:\\b(deterministic)\\s+)?\\b(fn)\\b",
+              "captures": {
+                "1": {
+                  "name": "storage.modifier.deterministic.cprime"
+                },
+                "2": {
+                  "name": "invalid.illegal.fn.cprime"
+                }
+              }
+            },
+            {
+              "match": "(?:\\b(deterministic)\\s+)?\\b([a-z_][A-Za-z0-9_]*)(?=\\s*\\()",
+              "captures": {
+                "1": {
+                  "name": "storage.modifier.deterministic.cprime"
+                },
+                "2": {
+                  "name": "entity.name.function.operation.cprime"
+                }
+              }
+            },
+            {
+              "include": "#reserved"
+            },
+            {
+              "include": "#names"
+            },
+            {
+              "include": "#punctuation"
+            }
+          ]
+        },
+        {
+          "comment": "struct S, enum E, type T, capability C",
+          "match": "^(struct|enum|type|capability)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.$1.cprime"
+            },
+            "2": {
+              "name": "entity.name.type.cprime"
+            }
+          }
+        },
+        {
+          "comment": "spec f, entry main",
+          "match": "^(spec|entry)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.$1.cprime"
+            },
+            "2": {
+              "name": "entity.name.function.cprime"
+            }
+          }
+        },
+        {
+          "comment": "bind Capability = provider::Path",
+          "match": "^(bind)\\b",
+          "captures": {
+            "1": {
+              "name": "keyword.other.bind.cprime"
+            }
+          }
+        }
+      ]
+    },
+    "clauses": {
+      "patterns": [
+        {
+          "match": "\\b(assurance)\\s+(proved|tested)\\b",
+          "captures": {
+            "1": {
+              "name": "keyword.other.clause.assurance.cprime"
+            },
+            "2": {
+              "name": "constant.language.assurance.cprime"
+            }
+          }
+        },
+        {
+          "comment": "unconstrained f, V.f, variant — variant is a keyword only here",
+          "begin": "\\b(unconstrained)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.other.clause.unconstrained.cprime"
+            }
+          },
+          "end": "$|(?=;|\\})",
+          "patterns": [
+            {
+              "match": "\\bvariant\\b",
+              "name": "keyword.other.waiver.variant.cprime"
+            },
+            {
+              "include": "#names"
+            },
+            {
+              "include": "#punctuation"
+            }
+          ]
+        },
+        {
+          "match": "\\b(uses|requires|ensures)\\b",
+          "name": "keyword.other.clause.$1.cprime"
+        },
+        {
+          "match": "\\bdeterministic\\b",
+          "name": "storage.modifier.deterministic.cprime"
+        }
+      ]
+    },
+    "reserved": {
+      "patterns": [
+        {
+          "comment": "future-reserved words (SA-49, ADR-050): E-RESERVED",
+          "match": "\\b(use|priv|interface|impl|func)\\b",
+          "name": "invalid.illegal.reserved.cprime"
+        }
+      ]
+    },
+    "literals": {
+      "patterns": [
+        {
+          "comment": "x\"…\" with an even number of hex digits",
+          "match": "\\bx\"(?:[0-9a-fA-F]{2})*\"",
+          "name": "constant.other.bytes.cprime"
+        },
+        {
+          "comment": "x\"…\" with an odd digit count or a non-hex character: E-HEX",
+          "match": "\\bx\"[^\"\\n]*\"",
+          "name": "invalid.illegal.bytes.cprime"
+        },
+        {
+          "comment": "0x literals are not allowed in .cprime: E-BYTES-0X",
+          "match": "\\b0x[0-9a-fA-F]*\\b",
+          "name": "invalid.illegal.bytes-0x.cprime"
+        },
+        {
+          "match": "\\b(true|false)\\b",
+          "name": "constant.language.boolean.cprime"
+        },
+        {
+          "match": "\\b[0-9]+\\b",
+          "name": "constant.numeric.integer.cprime"
+        },
+        {
+          "match": "\\(\\s*\\)",
+          "name": "constant.language.unit.cprime"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "match": "==>",
+          "name": "keyword.operator.logical.implies.cprime"
+        },
+        {
+          "match": "&&|\\|\\|",
+          "name": "keyword.operator.logical.cprime"
+        },
+        {
+          "match": "==|!=|<=|>=|<|>",
+          "name": "keyword.operator.comparison.cprime"
+        },
+        {
+          "match": "!",
+          "name": "keyword.operator.logical.not.cprime"
+        },
+        {
+          "match": "\\bis\\b",
+          "name": "keyword.operator.word.is.cprime"
+        },
+        {
+          "match": "\\+\\+",
+          "name": "keyword.operator.concat.cprime"
+        },
+        {
+          "match": "[-+*/%]",
+          "name": "keyword.operator.arithmetic.cprime"
+        },
+        {
+          "match": "=",
+          "name": "keyword.operator.assignment.cprime"
+        }
+      ]
+    },
+    "names": {
+      "patterns": [
+        {
+          "match": "\\b(U8|U64|I64)(::)(MAX|MIN)\\b",
+          "captures": {
+            "1": {
+              "name": "support.type.builtin.cprime"
+            },
+            "2": {
+              "name": "punctuation.separator.namespace.cprime"
+            },
+            "3": {
+              "name": "support.constant.cprime"
+            }
+          }
+        },
+        {
+          "match": "\\bresult\\b",
+          "name": "variable.language.result.cprime"
+        },
+        {
+          "match": "\\b(Unit|Bool|U8|U64|I64|Bytes|FixedBytes|Vec|Hash|Result|Option)\\b",
+          "name": "support.type.builtin.cprime"
+        },
+        {
+          "match": "\\bDiverge\\b",
+          "name": "support.type.capability.cprime"
+        },
+        {
+          "comment": "Capability::operation( call",
+          "match": "\\b([A-Za-z_][A-Za-z0-9_]*(?:::[A-Za-z_][A-Za-z0-9_]*)*)(::)([a-z_][A-Za-z0-9_]*)(?=\\s*\\()",
+          "captures": {
+            "1": {
+              "name": "entity.name.type.cprime"
+            },
+            "2": {
+              "name": "punctuation.separator.namespace.cprime"
+            },
+            "3": {
+              "name": "entity.name.function.cprime"
+            }
+          }
+        },
+        {
+          "match": "\\b(len|index|u64_be|push|slice|to_bytes)(?=\\s*\\()",
+          "name": "support.function.prelude.cprime"
+        },
+        {
+          "match": "\\b[a-z_][A-Za-z0-9_]*(?=\\s*\\()",
+          "name": "entity.name.function.cprime"
+        },
+        {
+          "comment": "lower-case path segment before ::, e.g. host::Crypto",
+          "match": "\\b[a-z_][A-Za-z0-9_]*(?=::)",
+          "name": "entity.name.namespace.cprime"
+        },
+        {
+          "match": "\\b[A-Z][A-Za-z0-9_]*\\b",
+          "name": "entity.name.type.cprime"
+        },
+        {
+          "match": "::",
+          "name": "punctuation.separator.namespace.cprime"
+        },
+        {
+          "match": "\\b[a-z_][A-Za-z0-9_]*\\b",
+          "name": "variable.other.cprime"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "match": "[{}]",
+          "name": "punctuation.section.braces.cprime"
+        },
+        {
+          "match": "[\\[\\]]",
+          "name": "punctuation.section.brackets.cprime"
+        },
+        {
+          "match": "[()]",
+          "name": "punctuation.section.parens.cprime"
+        },
+        {
+          "match": ",",
+          "name": "punctuation.separator.comma.cprime"
+        },
+        {
+          "match": ";",
+          "name": "punctuation.terminator.statement.cprime"
+        },
+        {
+          "match": "\\.",
+          "name": "punctuation.accessor.cprime"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+;; cprime-accepted v1 context=9f00e1 evidence=proved assumed=Auth::CryptoCap::hmac_sha256
+;; implements Auth::generate_token
+(impl Auth::generate_token [uid now secret]
+  (let [exp (+ now 3600)
+        msg (++ (u64_be uid) (u64_be exp))
+        sig (perform CryptoCap::hmac_sha256 secret msg)]
+    (SessionToken uid exp sig)))

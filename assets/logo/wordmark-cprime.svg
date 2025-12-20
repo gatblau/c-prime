@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 128" width="500" height="128">
+  <title>C prime</title>
+  <g fill="none" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="#E8A33D" d="M46 18 Q32 18 32 32 V52 Q32 64 20 64 Q32 64 32 76 V96 Q32 110 46 110"/>
+    <path stroke="#2BA89A" d="M86 18 Q114 64 86 110"/>
+    <path stroke="#1B1F2A" d="M50 66 L62 79 L82 48"/>
+  </g>
+  <g fill="none" stroke="#1B1F2A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" transform="translate(132 0)">
+    <path d="M56.63 39.37 A32 32 0 1 0 56.63 84.63"/>
+  </g>
+  <g fill="none" stroke="#2BA89A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" transform="translate(222 0)">
+    <path d="M5 50 V118"/><circle cx="27" cy="72" r="22"/>
+    <g transform="translate(64 0)"><path d="M5 94 V66 Q5 50 24 50"/></g>
+    <g transform="translate(104 0)"><path d="M5 50 V94"/><circle cx="5" cy="32" r="5.5" fill="#2BA89A" stroke="none"/></g>
+    <g transform="translate(124 0)"><path d="M5 94 V50 M5 66 Q5 50 21 50 Q37 50 37 66 V94 M37 66 Q37 50 53 50 Q69 50 69 66 V94"/></g>
+    <g transform="translate(212 0)"><path d="M0 72 H44 A22 22 0 1 0 37.56 87.56"/></g>
+  </g>
+</svg>

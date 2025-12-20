@@ -1,0 +1,6 @@
+(impl Geo::area [s]
+  (decreases [s])
+  (match s
+    [(Circle r) (* 3 (* r r))]
+    [(Square side) (if (and (> side 0) (not false)) (. s side) (- side -1))]
+    [None (par_map Geo::one (vec 0x0a ()))]))

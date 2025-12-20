@@ -1,0 +1,29 @@
+module Api
+
+struct Request {
+    method  Bytes
+    path    Bytes
+    query   Bytes
+    headers Vec[Bytes]
+    body    Bytes
+}
+
+struct Response {
+    status  U64
+    headers Vec[Bytes]
+    body    Bytes
+}
+
+spec handle(req Request) Response {
+    uses Log
+    ensures req.path == x"2f6865616c7468" ==> result.status == 200
+}
+
+server Api {
+    handler Api::handle
+    transport acme::HttpTransport
+}
+
+server OneLine { handler Api::handle; transport acme::HttpTransport }
+
+bind Log = host::Log

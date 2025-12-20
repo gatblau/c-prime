@@ -1,0 +1,9 @@
+module Bad
+
+capability C {
+    deterministic fn op(k Bytes) Bytes
+}
+
+spec f(func U64) U64 {
+    requires func != 0xab
+}

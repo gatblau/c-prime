@@ -1,0 +1,47 @@
+module Auth
+
+// A capability is a named set of effect operations.
+capability CryptoCap {
+    deterministic hmac_sha256(key, msg Bytes) Hash
+}
+
+struct SessionToken {
+    user_id    U64
+    expires_at U64
+    sig        Hash
+}
+
+spec generate_token(user_id, now U64, secret Bytes) SessionToken {
+    uses CryptoCap
+    requires user_id > 0
+    requires now <= U64::MAX - 3600
+    requires len(secret) >= 32
+    ensures result.user_id == user_id
+    ensures result.expires_at == now + 3600
+    ensures result.sig == CryptoCap::hmac_sha256(secret,
+        u64_be(user_id) ++ u64_be(result.expires_at))
+}
+
+enum Shape {
+    Circle { r U64 }
+    Square { side U64 }
+}
+
+spec area(s Shape) U64 {
+    assurance tested
+    unconstrained variant
+    requires s is Circle ==> s.Circle.r <= 1000
+    ensures s is Square ==> result == s.Square.side * s.Square.side
+}
+
+spec log_line(msg Bytes) {
+    uses Log
+    requires msg != x""
+    requires msg != x"0a1"
+}
+
+entry main(now U64) U64 {
+    uses CryptoCap, Clock
+}
+
+bind CryptoCap = host::Crypto

@@ -1,0 +1,19 @@
+{
+  "name": "cprime-textmate",
+  "displayName": "C′ syntax highlighting",
+  "description": "TextMate grammars for C′ contracts (.cprime) and implementations (.opq).",
+  "version": "0.1.0",
+  "private": true,
+  "engines": { "vscode": "^1.60.0" },
+  "categories": ["Programming Languages"],
+  "contributes": {
+    "languages": [
+      { "id": "cprime", "aliases": ["C′ contract", "cprime"], "extensions": [".cprime"], "configuration": "./cprime.language-configuration.json" },
+      { "id": "opq", "aliases": ["C′ implementation", "opq"], "extensions": [".opq"], "configuration": "./opq.language-configuration.json" }
+    ],
+    "grammars": [
+      { "language": "cprime", "scopeName": "source.cprime", "path": "./cprime.tmLanguage.json" },
+      { "language": "opq", "scopeName": "source.opq", "path": "./opq.tmLanguage.json" }
+    ]
+  }
+}
